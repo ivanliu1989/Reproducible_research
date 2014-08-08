@@ -98,7 +98,14 @@ head(imputed.data)
 5.2 Make a panel plot containing a time series plot of the 5-minute interval and the average number of steps taken.
 ```{r panel_plot, echo=TRUE}
 imputed.avg <- data.table(imputed.data)
-imputed.avg <- imputed.avg[,mean(steps, na.rm=T), by=interval]
-g <- ggplot(imputed.data, aes(interval, steps))
+imputed.avg.weekday <- imputed.avg[wd_indicator=="Weekday",]
+imputed.avg.weekend <- imputed.avg[wd_indicator=="Weekend",]
+imputed.avg.weekday <- imputed.avg.weekday[,mean(steps, na.rm=T), by=interval]
+imputed.avg.weekend <- imputed.avg.weekend[,mean(steps, na.rm=T), by=interval]
+imputed.avg.weekday$wd_indicator <- "Weekday"
+imputed.avg.weekend$wd_indicator <- "Weekend"
+imputed.avg <- rbind(imputed.avg.weekday,imputed.avg.weekend)
+#imputed.avg <- imputed.avg[,mean(steps, na.rm=T), by=interval]
+g <- ggplot(imputed.avg, aes(interval, V1))
 g + geom_line() + facet_grid(wd_indicator~.) + labs(y="Number of steps") + labs(x="Interval") + labs(title="Time Series Plot of Interval * Steps") + theme(panel.background = element_rect(colour = "blue"))
 ```
