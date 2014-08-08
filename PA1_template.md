@@ -1,3 +1,6 @@
+---
+output: html_document
+---
 # Activity Monitoring Devices
 
 ### 1.Loading and preprocessing the data
@@ -154,7 +157,7 @@ imputed.avg.weekend$wd_indicator <- "Weekend"
 imputed.avg <- rbind(imputed.avg.weekday,imputed.avg.weekend)
 #imputed.avg <- imputed.avg[,mean(steps, na.rm=T), by=interval]
 g <- ggplot(imputed.avg, aes(interval, V1))
-g + geom_line() + facet_grid(wd_indicator~.) + labs(y="Number of steps") + labs(x="Interval") + labs(title="Time Series Plot of Interval * Steps") + theme(panel.background = element_rect(colour = "blue"))
+g + geom_line() + facet_grid(wd_indicator~.) + labs(y="Number of steps") + labs(x="Interval") + labs(title="Time Series Plot of Interval * Steps") + theme(panel.background = element_rect(colour = "black"))
 ```
 
 ![plot of chunk panel_plot](figure/panel_plot.png) 
