@@ -80,13 +80,25 @@ The mean and median total number of steps taken per day are `r step.mean.imputed
 ### 5.Are there differences in activity patterns between weekdays and weekends?
 5.1 Create a new factor variable in the dataset with two levels.
 ```{r factor_var, echo=TRUE}
-a <- as.character(imputed.total$date)
+a <- as.character(imputed.data$date)
 b <- strptime(a,"%Y-%m-%d")
 c <- weekdays(b)
-imputed.total$weekday <- c
+imputed.data$weekday <- c
+imputed.data$wd_indicator[imputed.data$weekday == "Monday"]="Weekday"
+imputed.data$wd_indicator[imputed.data$weekday == "Tuesday"]="Weekday"
+imputed.data$wd_indicator[imputed.data$weekday == "Wednesday"]="Weekday"
+imputed.data$wd_indicator[imputed.data$weekday == "Thursday"]="Weekday"
+imputed.data$wd_indicator[imputed.data$weekday == "Friday"]="Weekday"
+imputed.data$wd_indicator[imputed.data$weekday == "Saturday"]="Weekend"
+imputed.data$wd_indicator[imputed.data$weekday == "Sunday"]="Weekend"
+imputed.data$wd_indicator <- as.factor(imputed.data$wd_indicator)
+head(imputed.data)
 ```
 
 5.2 Make a panel plot containing a time series plot of the 5-minute interval and the average number of steps taken.
-```{r, echo=TRUE}
-
+```{r panel_plot, echo=TRUE}
+imputed.avg <- data.table(imputed.data)
+imputed.avg <- imputed.avg[,mean(steps, na.rm=T), by=interval]
+g <- ggplot(imputed.data, aes(interval, steps))
+g + geom_line() + facet_grid(wd_indicator~.) + labs(y="Number of steps") + labs(x="Interval") + labs(title="Time Series Plot of Interval * Steps") + theme(panel.background = element_rect(colour = "blue"))
 ```
